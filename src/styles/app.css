@@ -7,12 +7,12 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
-  
+
   h1 {
     text-align: center;
     margin-bottom: 20px;
   }
-  
+
   .new-todo {
     width: 100%;
     padding: 12px;
@@ -21,13 +21,13 @@
     border: 1px solid #ccc;
     margin-bottom: 20px;
   }
-  
+
   .todo-list {
     list-style: none;
     padding: 0;
     margin: 0;
   }
-  
+
   .task-item {
     background: #f9f9f9;
     border: 1px solid #ddd;
@@ -36,13 +36,13 @@
     padding: 10px;
     position: relative;
   }
-  
+
   .view {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .destroy {
     display: none;
     border: none;
@@ -51,20 +51,48 @@
     cursor: pointer;
     color: red;
   }
-  
+
   .task-item:hover .destroy {
     display: inline;
   }
-  
+
   .footer {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
     color: #666;
   }
-  
+
   .no-tasks {
     text-align: center;
     font-style: italic;
     color: #aaa;
   }
+  
+  .completed label {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.filters {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.filters button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.filters button.selected {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #eee;
+  color: #000;
+}

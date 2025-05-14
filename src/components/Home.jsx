@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const Home = () => {
+const Home = () => {
   const [todos, setTodos] = useState([
     { title: 'Make the bed', id: Date.now() + 1 },
     { title: 'Wash my hands', id: Date.now() + 2 },
@@ -65,3 +65,5 @@ export const Home = () => {
     </section>
   );
 };
+
+export default Home;
