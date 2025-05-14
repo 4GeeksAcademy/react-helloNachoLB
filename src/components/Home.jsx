@@ -1,67 +1,110 @@
 import React, { useState } from 'react';
+import { useTodos } from '../hooks/useTodos';
+import '../styles/todo.css';
 
 const Home = () => {
-  const [todos, setTodos] = useState([
-    { title: 'Make the bed', id: Date.now() + 1 },
-    { title: 'Wash my hands', id: Date.now() + 2 },
-    { title: 'Eat', id: Date.now() + 3 },
-    { title: 'Walk the dog', id: Date.now() + 4 }
-  ]);
+  const [input, setInput] = useState('');
+  const {
+    todos,
+    addTodo,
+    deleteTodo,
+    toggleTodo,
+    clearCompleted,
+    filter,
+    setFilter,
+    activeCount,
+    totalCount,
+    loading,
+  } = useTodos();
 
-  const [taskInput, setTaskInput] = useState('');
-
-  const handleFormSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (taskInput.trim() === '') return;
-
-    setTodos([
-      ...todos,
-      { title: taskInput, id: Date.now() }
-    ]);
-    setTaskInput('');
-  };
-
-  const deleteTask = (taskId) => {
-    setTodos(todos.filter(task => task.id !== taskId));
+    await addTodo(input);
+    setInput('');
   };
 
   return (
     <section className="todoapp">
-      <header className="header">
+      <header>
         <h1>todos</h1>
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
-            autoFocus
             className="new-todo"
             placeholder="What needs to be done?"
-            value={taskInput}
-            onChange={(e) => setTaskInput(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            autoFocus
           />
         </form>
       </header>
 
-      <section className="main">
-        <ul className="todo-list">
-          {todos.length === 0 ? (
-            <li className="no-tasks">No hay tareas, añadir tareas</li>
-          ) : (
-            todos.map(task => (
-              <li key={task.id}>
-                <div className="view">
-                  <label>{task.title}</label>
-                  <button className="destroy" onClick={() => deleteTask(task.id)}></button>
-                </div>
-              </li>
-            ))
-          )}
-        </ul>
-      </section>
+      {loading ? (
+        <p className="loading">Cargando tareas...</p>
+      ) : (
+        <>
+          <ul className="todo-list">
+            {todos.length === 0 ? (
+              <li className="no-tasks">No hay tareas</li>
+            ) : (
+              todos.map((todo) => (
+                <li
+                  key={todo.id}
+                  className={`task-item ${todo.completed ? 'completed' : ''}`}
+                >
+                  <div className="view">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        onChange={() => toggleTodo(todo.id)}
+                      />
+                      {todo.title}
+                    </label>
+                    <button
+                      className="destroy"
+                      onClick={() => deleteTodo(todo.id)}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
 
-      <footer className="footer">
-        <span className="todo-count">
-          <strong>{todos.length}</strong> item{todos.length !== 1 ? 's' : ''} left
-        </span>
-      </footer>
+          <footer className="footer">
+            <span className="todo-count">
+              <strong>{activeCount}</strong> item
+              {activeCount !== 1 ? 's' : ''} left
+            </span>
+
+            <div className="filters">
+              <button
+                className={filter === 'all' ? 'selected' : ''}
+                onClick={() => setFilter('all')}
+              >
+                All
+              </button>
+              <button
+                className={filter === 'active' ? 'selected' : ''}
+                onClick={() => setFilter('active')}
+              >
+                Active
+              </button>
+              <button
+                className={filter === 'completed' ? 'selected' : ''}
+                onClick={() => setFilter('completed')}
+              >
+                Completed
+              </button>
+            </div>
+
+            <button className="clear-completed" onClick={clearCompleted}>
+              Clear completed
+            </button>
+          </footer>
+        </>
+      )}
     </section>
   );
 };
